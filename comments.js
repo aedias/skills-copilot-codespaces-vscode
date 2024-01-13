@@ -13,4 +13,4 @@ const server = http.createServer(function (req, res) {
 });
 // 5. listen port 3000
 server.listen(3000);
-console.log('Server is running at http://
+console.log('Server is running at http://' + require("os").hostname() + ':3000/');
