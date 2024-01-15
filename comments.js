@@ -1,16 +1,29 @@
 // create web server
-// 1. import http module
-const http = require('http');
-// 2. create server
-const server = http.createServer(function (req, res) {
-    // 3. set response header
-    res.writeHead(200, {
-        'Content-Type': 'text/html'
-    });
-    // 4. set response content
-    res.write('<html><body><p>This is home page.</p></body></html>');
-    res.end();
+const express = require('express');
+const app = express();
+const path = require('path');
+const port = 3000;
+
+// use public directory
+app.use(express.static('public'));
+
+// parse the body of the request
+app.use(express.json());
+
+// get comments
+app.get('/comments', (req, res) => {
+  res.sendFile(path.join(__dirname + '/data/comments.json'));
 });
-// 5. listen port 3000
-server.listen(3000);
-console.log('Server is running at http://' + require("os").hostname() + ':3000/');
+
+// post comments
+app.post('/comments', (req, res) => {
+  let comments = require('./data/comments.json');
+  let newComment = req.body;
+  comments.push(newComment);
+  res.json(comments);
+});
+
+// start web server
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`);
+});
